@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scf-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: scf-api
+  template:
+    metadata:
+      labels:
+        app: scf-api
+    spec:
+      containers:
+      - name: api
+        image: scf-api:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: scf-secrets
+              key: database-url
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: scf-secrets
+              key: redis-url 
